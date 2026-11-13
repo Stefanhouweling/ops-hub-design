@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F4D3A">
+<meta name="robots" content="noindex,nofollow">
+<title>Ops Hub</title>
+<!-- Design sample. All page content is loaded from data.js (fictional sample data). -->
+<style>
+
+:root{
+  --bg:#F6F3EC; --surface:#FFFFFF; --surface2:#F1EEE6; --line:rgba(28,40,32,.08);
+  --text:#17201B; --muted:#66706A; --faint:#98A09A;
+  --brand:#1F4D3A; --brand2:#2E6B50; --brandSoft:#E3EEE7; --accent:#E9A23B;
+  --green:#2FA36B; --amber:#E39A2D; --grey:#A3AAA5; --red:#D9534F;
+  --alex:#2F6FDB; --alexSoft:#E6EEFC; --sam:#C2477E; --samSoft:#FBE7F0; --both:#7A5AF0; --bothSoft:#EEE9FE;
+  --shadow:0 1px 2px rgba(20,30,25,.04),0 6px 24px rgba(20,30,25,.06);
+  --shadowLg:0 10px 40px rgba(20,40,30,.18);
+  --r:18px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0E1311; --surface:#171D1A; --surface2:#1E2622; --line:rgba(255,255,255,.07);
+    --text:#ECF1EE; --muted:#A3ADA7; --faint:#6E7872;
+    --brand:#173D2E; --brand2:#3E8A66; --brandSoft:#1D2E26;
+    --alex:#7FA8FF; --alexSoft:rgba(127,168,255,.14); --sam:#F28BB8; --samSoft:rgba(242,139,184,.14); --both:#B29DFF; --bothSoft:rgba(178,157,255,.15);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:128px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 var(--font);-webkit-font-smoothing:antialiased;padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+a{color:inherit}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+
+/* Top bar */
+.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.6) blur(18px);-webkit-backdrop-filter:saturate(1.6) blur(18px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-direction:column;gap:10px;padding-top:12px;padding-bottom:12px}
+.topRow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brandMark{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#2E6B50,#1F4D3A);display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(31,77,58,.3)}
+.brandMark b{font-size:18px;letter-spacing:-.02em;display:block;line-height:1.1}
+.brandMark small{color:var(--muted);font-size:13px}
+.updated{font-size:12px;color:var(--muted);text-align:right;line-height:1.3}
+.updated i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;vertical-align:1px;box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 22%,transparent)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface2);border-radius:12px;padding:3px;position:relative}
+.seg button{position:relative;z-index:1;padding:8px 0;font-size:14px;font-weight:600;color:var(--muted);border-radius:9px;transition:color .2s}
+.seg button.on{color:var(--text)}
+.seg .thumb{position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/3);background:var(--surface);border-radius:9px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.05);transition:transform .28s cubic-bezier(.3,.7,.2,1)}
+.seg button .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.deskNav{display:none}
+
+/* Hero */
+.hero{margin-top:16px;border-radius:24px;background:radial-gradient(120% 140% at 100% 0%,#3B7F5E 0%,#1F4D3A 46%,#163A2B 100%);color:#fff;padding:22px 20px 20px;position:relative;overflow:hidden;box-shadow:var(--shadowLg)}
+.hero:after{content:"";position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.05)}
+.heroGrid{display:flex;gap:16px;align-items:center;position:relative;z-index:1}
+.heroText{flex:1;min-width:0}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.72;font-weight:600}
+.hero h1{font-size:26px;line-height:1.15;letter-spacing:-.025em;margin:6px 0 12px;font-weight:750}
+.mustdo{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;position:relative;z-index:1;margin-top:16px}
+.mustdo .fl{flex:none;width:28px;height:28px;border-radius:9px;background:var(--accent);color:#3a2300;display:grid;place-items:center;font-weight:800;font-size:15px}
+.mustdo b{display:block;font-size:15px;line-height:1.3}
+.mustdo span{font-size:13.5px;opacity:.82;line-height:1.4;display:block;margin-top:2px}
+.mustdo button{margin-top:10px;background:#fff;color:#1F4D3A;font-weight:700;font-size:14px;border-radius:10px;padding:8px 12px}
+.ring{flex:none;width:112px;height:112px;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .c b{font-size:36px;line-height:1;font-weight:800;letter-spacing:-.03em;display:block}
+.ring .c small{font-size:11px;opacity:.8;display:block;margin-top:2px;line-height:1.2}
+.ringCap{font-size:12.5px;opacity:.78;margin-top:4px}
+
+/* Tiles */
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.tile{background:var(--surface);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;gap:4px;transition:transform .15s}
+.tile:active{transform:scale(.98)}
+.tile .n{font-size:34px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.tile .l{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px}
+.tile .d{font-size:12.5px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+
+/* Sections */
+.grid{display:grid;grid-template-columns:1fr;gap:28px;margin-top:30px}
+section.sec{min-width:0}
+.secHead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 12px}
+.secHead h2{font-size:21px;letter-spacing:-.02em;margin:0;font-weight:750}
+.secHead .meta{font-size:13px;color:var(--muted);white-space:nowrap}
+.cap{font-size:13.5px;color:var(--muted);margin:-6px 2px 12px}
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow)}
+.list{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.item{display:flex;gap:12px;padding:14px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.item:first-child{border-top:0}
+.item .ic{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:16px}
+.item .body{flex:1;min-width:0}
+.item .t{font-weight:650;font-size:15.5px;line-height:1.3}
+.item .s{font-size:14px;color:var(--muted);margin-top:3px;line-height:1.45}
+.item .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.subhead{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:18px 4px 8px}
+.subhead:first-of-type{margin-top:0}
+
+/* Chips & pills */
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:650;padding:3px 10px 3px 8px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.chip:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.o-Alex{color:var(--alex);background:var(--alexSoft)}
+.o-Sam{color:var(--sam);background:var(--samSoft)}
+.o-Both{color:var(--both);background:var(--bothSoft)}
+.pill{display:inline-flex;align-items:center;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.01em;white-space:nowrap}
+.p-urgent{background:#FDE8E6;color:#B4322C}
+.p-normal{background:var(--brandSoft);color:var(--brand2)}
+.p-low{background:var(--surface2);color:var(--muted)}
+.p-unv{background:#FFF3DC;color:#9A5B00}
+@media (prefers-color-scheme:dark){.p-urgent{background:rgba(217,83,79,.18);color:#FF9B95}.p-unv{background:rgba(233,162,59,.16);color:#F3C26F}}
+
+/* Approvals */
+.appr{display:grid;gap:14px}
+.ac{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
+.ac.urgent{box-shadow:var(--shadow),inset 4px 0 0 var(--red)}
+.ac .h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.ac h3{margin:0 0 6px;font-size:18px;line-height:1.3;letter-spacing:-.015em}
+.ac p{margin:0;font-size:14.5px;color:var(--muted)}
+.ac .rec{margin-top:12px;background:color-mix(in srgb,var(--accent) 13%,var(--surface));border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.45}
+.ac .rec b{color:color-mix(in srgb,var(--accent) 60%,var(--text))}
+.acts{display:flex;gap:10px;margin-top:14px}
+.btn{flex:1;display:inline-flex;justify-content:center;align-items:center;gap:8px;padding:12px 14px;border-radius:13px;font-weight:700;font-size:15px;transition:transform .12s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--brand);color:#fff;box-shadow:0 4px 14px rgba(31,77,58,.28)}
+@media (prefers-color-scheme:dark){.btn.pri{background:var(--brand2)}}
+.btn.sec{background:var(--surface2)}
+.btn svg{width:17px;height:17px}
+.btn .chev{transition:transform .25s}
+.ac.open .btn .chev{transform:rotate(180deg)}
+.draft{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.ac.open .draft{grid-template-rows:1fr}
+.draft>div{overflow:hidden}
+.draftIn{margin-top:14px;border-radius:14px;background:var(--surface2);padding:14px}
+.kv{display:grid;grid-template-columns:66px 1fr;gap:4px 10px;font-size:13.5px;margin-bottom:10px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:550}
+.draftIn ul{margin:0;padding-left:18px;font-size:14.5px}
+.draftIn li{margin:6px 0}
+.draftIn .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+.phrase{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
+.phrase code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;background:var(--surface2);padding:2px 7px;border-radius:6px;color:var(--text)}
+.honest{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin:-2px 2px 12px}
+
+/* Team */
+.team{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.bot{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;text-align:left;display:flex;flex-direction:column;gap:8px;min-width:0;transition:transform .15s}
+.bot:active{transform:scale(.985)}
+.bot .top2{display:flex;justify-content:space-between;align-items:flex-start}
+.bot .em{width:40px;height:40px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;font-size:21px}
+.bot .st{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:650;color:var(--muted)}
+.bot .st .dot{box-shadow:0 0 0 3px color-mix(in srgb,currentColor 0%,transparent)}
+.bot b{font-size:15.5px;letter-spacing:-.01em;line-height:1.25}
+.bot .last{font-size:12.5px;color:var(--muted)}
+.bot .wait{font-size:12px;font-weight:650;color:#9A5B00;background:#FFF3DC;border-radius:8px;padding:3px 8px;align-self:flex-start}
+@media (prefers-color-scheme:dark){.bot .wait{background:rgba(233,162,59,.16);color:#F3C26F}}
+.bot .more{display:none;font-size:13.5px;line-height:1.45;border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+.bot .more p{margin:0 0 8px}
+.bot .more small{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);font-weight:700;margin-bottom:2px}
+.bot.open{grid-column:1/-1}
+.bot.open .more{display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:0 2px 12px}
+.legend span{display:flex;align-items:center;gap:6px}
+
+/* Timeline */
+.tl{position:relative;background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:6px 0}
+.ev{display:flex;gap:12px;padding:11px 16px;align-items:flex-start}
+.date{flex:none;width:52px;border-radius:12px;background:var(--surface2);text-align:center;padding:6px 0 5px;line-height:1.1}
+.date small{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.date b{display:block;font-size:20px;font-weight:800;letter-spacing:-.03em}
+.date.hl{background:var(--brand);color:#fff}
+.date.hl small{color:rgba(255,255,255,.8)}
+.ev .t{font-weight:650;font-size:15px;line-height:1.3}
+.ev .s{font-size:13.5px;color:var(--muted);margin-top:2px}
+.ev+.ev{border-top:1px solid var(--line)}
+.mon{font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.08em;color:var(--brand2);padding:12px 16px 4px}
+.mon~.mon{border-top:1px solid var(--line);margin-top:4px;padding-top:14px}
+
+/* Handover */
+.prog{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.progTop{display:flex;justify-content:space-between;align-items:baseline}
+.progTop b{font-size:30px;font-weight:800;letter-spacing:-.03em}
+.progTop span{font-size:13.5px;color:var(--muted)}
+.bar{height:10px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand2),#5DBB8A)}
+.chk{display:flex;gap:12px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.chk:first-child{border-top:0}
+.box{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--faint);display:grid;place-items:center;margin-top:1px}
+.chk.done .box{background:var(--green);border-color:var(--green);color:#fff}
+.chk.done .t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--faint)}
+.chk .t{font-weight:600;font-size:14.5px;line-height:1.35}
+.chk .s{font-size:13px;color:var(--muted);margin-top:3px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+/* Revenue */
+.rev{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.big div small{display:block;font-size:12.5px;color:var(--muted);font-weight:600}
+.big div b{display:block;font-size:28px;font-weight:800;letter-spacing:-.035em;line-height:1.15}
+.big div span{font-size:12.5px;color:var(--muted)}
+.chart{margin-top:18px}
+.chart{max-width:420px}
+.chart text{font:600 11.5px var(--font);fill:var(--muted)}
+.chart .v{font:700 12px var(--font);fill:var(--text)}
+.kvList{margin-top:14px;border-top:1px solid var(--line)}
+.kvList div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kvList div.st{flex-direction:column;gap:2px}
+.kvList div.st b{text-align:left}
+.kvList div:last-child{border-bottom:0}
+.kvList span{color:var(--muted);flex:none}
+.kvList b{text-align:right;font-weight:600}
+.foot{font-size:12.5px;color:var(--muted);margin:10px 2px 0}
+
+/* Links */
+.links{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:560px){.links{grid-template-columns:repeat(2,1fr)}}
+.lk{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:12px 14px;text-decoration:none;display:flex;gap:10px;align-items:center;min-width:0}
+.lk .li{flex:none;width:32px;height:32px;border-radius:9px;background:var(--brandSoft);display:grid;place-items:center;font-size:16px}
+.lk b{display:block;font-size:14px;line-height:1.25;overflow:hidden;text-overflow:ellipsis}
+.lk small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lk div{min-width:0}
+
+.empty{padding:18px;text-align:center;color:var(--muted);font-size:14px}
+.hide{display:none!important}
+.pageFoot{text-align:center;font-size:12.5px;color:var(--faint);margin:36px 0 10px;line-height:1.6}
+
+/* Tab bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:saturate(1.6) blur(20px);-webkit-backdrop-filter:saturate(1.6) blur(20px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(8px + env(safe-area-inset-bottom))}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--faint);padding:6px 0;position:relative}
+.tabs button svg{width:24px;height:24px}
+.tabs button.on{color:var(--brand2)}
+.tabs .badge{position:absolute;top:2px;left:calc(50% + 6px);background:var(--red);color:#fff;font-size:10.5px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--surface)}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:#16201B;color:#fff;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:60;transition:all .3s cubic-bezier(.3,.7,.2,1);width:max-content;max-width:calc(100% - 32px);display:flex;gap:10px;align-items:center;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .ok{flex:none;width:22px;height:22px;border-radius:50%;background:var(--green);display:grid;place-items:center}
+
+/* Desktop */
+@media (min-width:900px){
+  body{padding-bottom:40px}
+  .tabs{display:none}
+  .toast{bottom:32px}
+  .wrap{padding:0 32px}
+  .top .wrap{flex-direction:row;align-items:center;justify-content:space-between}
+  .topRow{flex:none;gap:24px}
+  .updated{display:none}
+  .deskNav{display:flex;gap:4px}
+  .deskNav a{text-decoration:none;font-size:14px;font-weight:600;color:var(--muted);padding:7px 12px;border-radius:9px}
+  .deskNav a:hover{background:var(--surface2);color:var(--text)}
+  .seg{width:300px}
+  .hero{padding:30px 32px;margin-top:24px}
+  .hero h1{font-size:34px}
+  .ring{width:140px;height:140px}
+  .ring .c b{font-size:44px}
+  .mustdo{max-width:620px}
+  .tiles{grid-template-columns:repeat(4,1fr);gap:16px}
+  .grid{grid-template-columns:1fr 1fr;gap:32px 28px}
+  .full{grid-column:1/-1}
+  .appr{grid-template-columns:1fr 1fr}
+  .team{grid-template-columns:repeat(3,1fr)}
+  .links{grid-template-columns:repeat(3,1fr)}
+  html{scroll-padding-top:84px}
+}
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="topRow">
+      <div class="brandMark">
+        <div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l6-10 4 6 3-4 5 8z"/><circle cx="17" cy="6" r="2"/></svg></div>
+        <div><b>Ops Hub</b><small id="today"></small></div>
+      </div>
+      <nav class="deskNav">
+        <a href="#ok">Approvals</a><a href="#today-sec">Today</a><a href="#team">Team</a><a href="#coming">Calendar</a><a href="#handover">Handover</a><a href="#revenue">Revenue</a>
+      </nav>
+      <div class="updated" id="updated"><i></i></div>
+    </div>
+    <div class="seg" role="tablist" aria-label="Show items for" id="seg">
+      <div class="thumb" id="thumb"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="home">
+  <div class="hero">
+    <div class="heroGrid">
+      <div class="heroText">
+        <div class="eyebrow" id="campName"></div>
+        <h1 id="greet"></h1>
+        <div style="font-size:14.5px;opacity:.85;line-height:1.45" id="heroSub"></div>
+      </div>
+      <div>
+        <div class="ring">
+          <svg width="100%" height="100%" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="10"/>
+            <circle id="ringArc" cx="60" cy="60" r="52" fill="none" stroke="#F3C26F" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" style="transition:stroke-dashoffset 1s ease"/>
+          </svg>
+          <div class="c"><div><b id="days"></b><small>days to<br>handover</small></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="mustdo" id="mustdo">
+      <div class="fl">!</div>
+      <div>
+        <b id="mustTitle"></b>
+        <span id="mustDetail"></span>
+        <button data-jump="ok" id="mustCta"></button>
+      </div>
+    </div>
+    <div class="ringCap" id="ringCap" style="position:relative;z-index:1;margin-top:12px"></div>
+  </div>
+
+  <div class="tiles">
+    <button class="tile" data-jump="ok"><span class="n" id="cOk"></span><span class="l"><i class="dot" style="background:var(--red)"></i>Needs your OK</span><span class="d" id="tileOkD"></span></button>
+    <button class="tile" data-jump="today-sec"><span class="n" id="cDo"></span><span class="l"><i class="dot" style="background:var(--accent)"></i>To do</span><span class="d" id="tileDoD"></span></button>
+    <button class="tile" data-jump="today-sec"><span class="n" id="cHeads"></span><span class="l"><i class="dot" style="background:var(--alex)"></i>Heads-up</span><span class="d" id="tileHeadsD"></span></button>
+    <button class="tile" data-jump="team"><span class="n" id="cBots"></span><span class="l"><i class="dot" style="background:var(--green)"></i>Bots active</span><span class="d" id="cBotsD"></span></button>
+  </div>
+
+  <div class="grid">
+    <section class="sec full" id="ok">
+      <div class="secHead"><h2>Needs your OK</h2><span class="meta" id="okMeta"></span></div>
+      <div class="honest"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span id="honestTxt"></span></div>
+      <div class="appr" id="apprList"></div>
+    </section>
+
+    <section class="sec" id="today-sec">
+      <div class="secHead"><h2>Today</h2><span class="meta">Last 48 hours</span></div>
+      <div id="todayList"></div>
+    </section>
+
+    <section class="sec" id="coming">
+      <div class="secHead"><h2>Coming up</h2><span class="meta">Next 14 days +</span></div>
+      <div class="tl" id="tl"></div>
+      <p class="foot" id="comingFoot"></p>
+    </section>
+
+    <section class="sec full" id="team">
+      <div class="secHead"><h2>Team</h2><span class="meta" id="teamMeta"></span></div>
+      <div class="legend"><span><i class="dot" style="background:var(--green)"></i>Active</span><span><i class="dot" style="background:var(--grey)"></i>Quiet / paused</span><span><i class="dot" style="background:var(--amber)"></i>Waiting on you</span><span style="color:var(--faint)">Tap a bot for details</span></div>
+      <div class="team" id="teamGrid"></div>
+    </section>
+
+    <section class="sec" id="handover">
+      <div class="secHead"><h2>Handover</h2><span class="meta" id="hoMeta"></span></div>
+      <div class="prog" style="margin-bottom:12px"><div class="progTop"><b id="hoPct"></b><span id="hoTxt"></span></div><div class="bar"><i id="hoBar"></i></div></div>
+      <div class="list" id="hoList"></div>
+    </section>
+
+    <section class="sec" id="revenue">
+      <div class="secHead"><h2>Revenue Plan</h2><span class="meta" id="revMeta"></span></div>
+      <div class="rev" id="revBody"></div>
+      <p class="foot" id="revFoot"></p>
+    </section>
+
+    <section class="sec" id="board">
+      <div class="secHead"><h2>Board &amp; committee</h2></div>
+      <div class="list" style="margin-bottom:12px" id="boardEvents"></div>
+      <div class="subhead">Open asks for you</div>
+      <div class="list" id="askList"></div>
+    </section>
+
+    <section class="sec" id="drive">
+      <div class="secHead"><h2>Drive review</h2><span class="meta" id="driveMeta"></span></div>
+      <div class="prog" id="driveBody"></div>
+    </section>
+
+    <section class="sec full" id="links">
+      <div class="secHead"><h2>Quick links</h2></div>
+      <div class="links" id="linkGrid"></div>
+    </section>
+  </div>
+
+  <p class="pageFoot" id="pageFoot"></p>
+</main>
+
+<nav class="tabs" id="tabs">
+  <button class="on" data-jump="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+  <button data-jump="ok"><span class="badge" id="tabBadge"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Approvals</button>
+  <button data-jump="team"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Team</button>
+  <button data-jump="coming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Calendar</button>
+  <button data-jump="revenue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/></svg>Revenue</button>
+</nav>
+
+<div class="toast" id="toast"><span class="ok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span id="toastTxt">Copied</span></div>
+
+<script src="data.js"></script>
+<script>
+const D = window.OPS_HUB_DATA;
+if (!D) throw new Error("data.js did not load. Open this folder over a local server, or keep data.js next to index.html.");
+
+const MONTHS = {Jan:"January",Feb:"February",Mar:"March",Apr:"April",May:"May",Jun:"June",Jul:"July",Aug:"August",Sep:"September",Oct:"October",Nov:"November",Dec:"December"};
+
+const ownerLabel = o => (D.ownerLabels && D.ownerLabels[o]) || o;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chip = o => `<span class="chip o-${o}">${esc(ownerLabel(o))}</span>`;
+const unv = t => `<span class="pill p-unv">${esc(t||"Unverified")}</span>`;
+
+const approvals = D.approvals;
+const today = D.today;
+const bots = D.bots;
+const coming = D.coming;
+const handover = D.handover;
+const asks = D.asks;
+const links = D.links;
+
+let view = D.owners.all;
+const shows = o => view === D.owners.all || o === view || o === D.owners.both;
+const chev = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+const copyIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
+
+function nowDate(){
+  return D.now ? new Date(D.now) : new Date();
+}
+
+function render(){
+  const ap = approvals.filter(a => shows(a.owner));
+  document.getElementById("apprList").innerHTML = ap.length ? ap.map(a => `
+    <article class="ac ${a.pri==="urgent"?"urgent":""}" id="ac-${a.id}">
+      <div class="h">${chip(a.owner)}<span class="pill p-${a.pri}">${esc(a.priLabel)}</span></div>
+      <h3>${esc(a.title)}</h3>
+      <p>${esc(a.why)}</p>
+      ${a.rec?`<div class="rec"><b>${esc(a.rec.label)}</b> ${esc(a.rec.text)}</div>`:""}
+      <div class="draft"><div><div class="draftIn">
+        <dl class="kv">${a.kv.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+        ${a.draft && a.draft.length?`<ul>${a.draft.map(d=>`<li>${esc(d)}</li>`).join("")}</ul>`:""}
+        <div class="note">${a.note?esc(a.note)+" ":""}${a.draft && a.draft.length?esc(D.draftNoteFull):""}</div>
+      </div></div></div>
+      <div class="acts">
+        <button class="btn sec" data-toggle="${a.id}" data-lbl="${a.draft && a.draft.length?"Read draft":"Details"}"><span>${a.draft && a.draft.length?"Read draft":"Details"}</span> ${chev}</button>
+        <button class="btn pri" data-copy="${esc(a.phrase)}">${copyIc} Approve</button>
+      </div>
+      <div class="phrase">Copies <code>${esc(a.phrase)}</code> for the chat</div>
+    </article>`).join("") : `<div class="list empty">Nothing waiting on you 🎉</div>`;
+  document.getElementById("okMeta").textContent = ap.length + " waiting";
+
+  const td = today.filter(t => shows(t.owner));
+  const doI = td.filter(t=>t.kind==="do"), hd = td.filter(t=>t.kind==="heads");
+  const row = t => {
+    const tags = [];
+    if (t.tag) tags.push(`<span class="pill p-low">${esc(t.tag)}</span>`);
+    if (t.unverified) tags.push(unv(t.unverified));
+    return `<div class="item"><div class="ic" style="background:${t.kind==="do"?"#FDE8E6":"var(--surface2)"}">${t.icon}</div><div class="body"><div class="t">${esc(t.title)}</div><div class="s">${esc(t.detail)}</div><div class="row">${chip(t.owner)}${tags.join("")}</div></div></div>`;
+  };
+  document.getElementById("todayList").innerHTML =
+    (doI.length?`<div class="subhead">To do</div><div class="list">${doI.map(row).join("")}</div>`:"") +
+    (hd.length?`<div class="subhead">Heads-up</div><div class="list">${hd.map(row).join("")}</div>`:"") ||
+    `<div class="list empty">All clear</div>`;
+
+  const ho = handover.filter(c => shows(c.owner));
+  const dn = ho.filter(c=>c.done).length, pct = ho.length?Math.round(dn/ho.length*100):0;
+  document.getElementById("hoList").innerHTML = ho.map(c => `<div class="chk ${c.done?"done":""}"><div class="box">${c.done?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>':""}</div><div><div class="t">${esc(c.t)}</div><div class="s">${chip(c.owner)}<span>${esc(c.m)}</span></div></div></div>`).join("");
+  document.getElementById("hoPct").textContent = pct + "%";
+  document.getElementById("hoTxt").textContent = `${dn} of ${ho.length} done`;
+  document.getElementById("hoBar").style.width = Math.max(pct,3) + "%";
+  document.getElementById("ringArc").style.strokeDashoffset = 326.7 * (1 - pct/100);
+  document.getElementById("ringCap").innerHTML = `<b style="color:#F3C26F">●</b> ${esc(D.ringCapPrefix)} ${dn} of ${ho.length} steps done${view===D.owners.all?"":" for "+ownerLabel(view)}`;
+
+  const as = asks.filter(a => shows(a.owner));
+  document.getElementById("askList").innerHTML = as.map(a => `<div class="item"><div class="body"><div class="t">${esc(a.t)}</div><div class="s">${esc(a.s)}</div><div class="row">${chip(a.owner)}</div></div></div>`).join("") || `<div class="empty">None</div>`;
+
+  document.getElementById("cOk").textContent = ap.length;
+  document.getElementById("cDo").textContent = doI.length;
+  document.getElementById("cHeads").textContent = hd.length;
+  document.getElementById("tabBadge").textContent = ap.length;
+  document.getElementById("tabBadge").classList.toggle("hide", !ap.length);
+  const hr = +new Intl.DateTimeFormat("en-GB",{hour:"numeric",hourCycle:"h23",timeZone:D.timeZone}).format(nowDate());
+  const g = hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
+  document.getElementById("greet").textContent = view===D.owners.all ? `${g}, ${D.directorsTogether}` : `${g}, ${ownerLabel(view)}`;
+  document.getElementById("mustdo").classList.toggle("hide", view===D.mustDo.hideFor);
+  bindDyn();
+}
+
+function renderStatic(){
+  document.getElementById("teamGrid").innerHTML = bots.map((b,i) => `
+    <button class="bot" data-bot="${i}">
+      <div class="top2"><div class="em">${b.em}</div><div class="st"><i class="dot" style="background:var(--${b.c})"></i>${esc(b.st)}</div></div>
+      <b>${esc(b.name)}</b>
+      <div class="last">${esc(b.last)}</div>
+      ${b.wait?'<span class="wait">● Waiting on you</span>':""}
+      <div class="more"><small>Working on</small><p>${esc(b.doing)}</p><small>Waiting on</small><p style="margin:0">${esc(b.waiting)}</p></div>
+    </button>`).join("");
+  const act = bots.filter(b=>b.c==="green").length;
+  document.getElementById("cBots").textContent = act;
+  document.getElementById("cBotsD").textContent = `of ${bots.length} specialists`;
+  document.getElementById("teamMeta").textContent = `${bots.length} specialist bots`;
+  document.querySelectorAll(".bot").forEach(el => el.onclick = () => el.classList.toggle("open"));
+
+  let lastM = "";
+  document.getElementById("tl").innerHTML = coming.map(e => { const hdr = e.m!==lastM ? `<div class="mon">${MONTHS[e.m]||e.m}</div>` : ""; lastM=e.m;
+    return hdr + `<div class="ev"><div class="date ${e.hl?"hl":""}"><small>${e.d==="~"?"About":esc(e.d)}</small><b>${esc(e.n)}</b></div><div style="min-width:0"><div class="t">${esc(e.t)}</div><div class="s">${esc(e.s)}</div>${e.unv?`<div style="margin-top:6px">${unv()}</div>`:""}</div></div>`; }).join("");
+
+  document.getElementById("linkGrid").innerHTML = links.map(([i,t,s,h]) => `<a class="lk" href="${esc(h)}" target="_blank" rel="noopener"><span class="li">${i}</span><div><b>${esc(t)}</b><small>${esc(s)}</small></div></a>`).join("");
+}
+
+function renderChrome(){
+  document.title = D.docTitle;
+  document.getElementById("campName").textContent = D.campName;
+  document.getElementById("heroSub").textContent = D.heroSub;
+  document.getElementById("updated").innerHTML = `<i></i>${esc(D.updatedLabel)}`;
+  document.getElementById("mustTitle").textContent = D.mustDo.title;
+  document.getElementById("mustDetail").textContent = D.mustDo.detail;
+  document.getElementById("mustCta").textContent = D.mustDo.cta;
+  document.getElementById("mustCta").dataset.jump = D.mustDo.jump;
+  document.getElementById("tileOkD").textContent = D.tiles.okDetail;
+  document.getElementById("tileDoD").textContent = D.tiles.doDetail;
+  document.getElementById("tileHeadsD").textContent = D.tiles.headsDetail;
+  document.getElementById("honestTxt").textContent = D.honest;
+  document.getElementById("comingFoot").textContent = D.comingFoot;
+  document.getElementById("hoMeta").textContent = "to " + D.handoverLabel;
+  document.getElementById("pageFoot").innerHTML = esc(D.snapshot).replace(/\n/g,"<br>");
+
+  const seg = document.getElementById("seg");
+  const colors = { [D.owners.primary]:"var(--alex)", [D.owners.secondary]:"var(--sam)" };
+  const opts = [D.owners.all, D.owners.primary, D.owners.secondary];
+  opts.forEach((v,i) => {
+    const b = document.createElement("button");
+    if (i===0) b.className = "on";
+    b.dataset.v = v;
+    b.innerHTML = colors[v] ? `<span class="sw" style="background:${colors[v]}"></span>${esc(ownerLabel(v))}` : esc(ownerLabel(v));
+    seg.appendChild(b);
+  });
+
+  const R = D.revenue;
+  document.getElementById("revMeta").textContent = R.meta;
+  document.getElementById("revBody").innerHTML = `
+    <div class="big">
+      <div><small>${esc(R.lastYearLabel)}</small><b>${esc(R.lastYearAmount)}</b><span>${esc(R.lastYearNote)}</span></div>
+      <div><small>${esc(R.seasonLabel)}</small><b>${esc(R.seasonAmount)}</b><span>${esc(R.seasonNote)}</span></div>
+    </div>
+    <svg class="chart" viewBox="0 0 340 128" width="100%" role="img" aria-label="${esc(R.chartLabel)}">
+      <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#2E6B50"/><stop offset="1" stop-color="#5DBB8A"/></linearGradient></defs>
+      <text x="0" y="14">${esc(R.targetLabel)}</text><text class="v" x="340" y="14" text-anchor="end">${esc(R.targetAmount)}</text>
+      <rect x="0" y="22" width="340" height="14" rx="7" fill="var(--surface2)"/><rect x="0" y="22" width="340" height="14" rx="7" fill="none" stroke="var(--faint)" stroke-dasharray="4 4"/>
+      <text x="0" y="58">${esc(R.lastYearLabel)}</text><text class="v" x="340" y="58" text-anchor="end">${esc(R.lastYearPctLabel)}</text>
+      <rect x="0" y="66" width="340" height="14" rx="7" fill="var(--surface2)"/><rect class="grow" x="0" y="66" width="${R.lastYearBar}" height="14" rx="7" fill="url(#g1)"/>
+      <text x="0" y="102">${esc(R.seasonLabel)}</text><text class="v" x="340" y="102" text-anchor="end">${esc(R.seasonPctLabel)}</text>
+      <rect x="0" y="110" width="340" height="14" rx="7" fill="var(--surface2)"/><rect class="grow" x="0" y="110" width="${R.seasonBar}" height="14" rx="7" fill="#E9A23B"/>
+    </svg>
+    <div class="kvList">
+      ${R.kv.map(row => {
+        const [k,v,kind] = row;
+        return `<div${kind==="multi"?' class="st"':""}><span>${esc(k)}</span><b>${esc(v).replace(/\n/g,"<br>")}</b></div>`;
+      }).join("")}
+    </div>`;
+  document.getElementById("revFoot").textContent = R.foot;
+
+  document.getElementById("boardEvents").innerHTML = D.boardEvents.map(e =>
+    `<div class="ev"><div class="date${e.hl?" hl":""}"><small>${esc(e.month)}</small><b>${esc(e.day)}</b></div><div><div class="t">${esc(e.title)}</div><div class="s">${esc(e.sub)}</div></div></div>`
+  ).join("");
+
+  const Dr = D.drive;
+  document.getElementById("driveMeta").textContent = Dr.meta;
+  document.getElementById("driveBody").innerHTML = `
+    <div class="progTop"><b>${esc(String(Dr.pct))}%</b><span>${esc(Dr.doneLabel)}</span></div>
+    <div class="bar"><i style="width:${Dr.pct}%"></i></div>
+    <div class="big" style="margin-top:16px;grid-template-columns:repeat(3,1fr)">
+      <div><small>Reviewed</small><b style="font-size:22px">${esc(Dr.reviewed)}</b></div>
+      <div><small>To read</small><b style="font-size:22px">${esc(Dr.toRead)}</b></div>
+      <div><small>Media</small><b style="font-size:22px">${esc(Dr.media)}</b><span>not counted</span></div>
+    </div>
+    <p class="foot" style="margin:14px 0 0">${esc(Dr.foot)}</p>`;
+}
+
+function bindDyn(){
+  document.querySelectorAll("[data-toggle]").forEach(b => b.onclick = () => {
+    const ac = document.getElementById("ac-"+b.dataset.toggle); ac.classList.toggle("open");
+    b.querySelector("span").textContent = ac.classList.contains("open") ? "Hide" : b.dataset.lbl;
+  });
+  document.querySelectorAll("[data-copy]").forEach(b => b.onclick = () => copy(b.dataset.copy));
+  document.querySelectorAll("[data-jump]").forEach(b => b.onclick = () => jump(b.dataset.jump));
+}
+
+let tt;
+function toast(msg){ const t=document.getElementById("toast"); document.getElementById("toastTxt").textContent=msg; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),3200); }
+function copy(txt){
+  const done = () => toast(D.toastCopied);
+  const fallback = () => { const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy")}catch(e){} ta.remove(); done(); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+}
+function jump(id){
+  if (id==="home") window.scrollTo({top:0,behavior:"smooth"});
+  else document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+renderChrome();
+
+// Segmented filter
+document.querySelectorAll(".seg button").forEach((b,i) => b.onclick = () => {
+  view = b.dataset.v;
+  document.querySelectorAll(".seg button").forEach(x=>x.classList.toggle("on", x===b));
+  document.getElementById("thumb").style.transform = `translateX(${i*100}%)`;
+  render();
+});
+
+// Tab highlight
+const tabIds = ["home","ok","team","coming","revenue"];
+function onScroll(){
+  let cur = "home";
+  let best = -Infinity;
+  for (const id of tabIds.slice(1)) { const t=document.getElementById(id).getBoundingClientRect().top; if (t < window.innerHeight*0.45 && t > best) { best=t; cur=id; } }
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on", b.dataset.jump===cur));
+}
+window.addEventListener("scroll", onScroll, {passive:true});
+
+// Live countdown to handover (uses the frozen sample clock in data.js)
+(function(){
+  const now = nowDate();
+  const days = Math.max(0, Math.ceil((new Date(D.handoverAt) - now)/86400000));
+  document.getElementById("days").textContent = days;
+  const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",timeZone:D.timeZone}).formatToParts(now).map(x=>[x.type,x.value]));
+  document.getElementById("today").textContent = `${parts.weekday} ${parts.day} ${parts.month}`;
+})();
+
+renderStatic(); render();
+</script>
+</body>
+</html>
